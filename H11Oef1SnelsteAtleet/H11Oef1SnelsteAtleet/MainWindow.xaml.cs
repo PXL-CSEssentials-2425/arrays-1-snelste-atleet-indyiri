@@ -19,29 +19,57 @@ namespace H11Oef1SnelsteAtleet
         public MainWindow()
         {
             InitializeComponent();
+            nameTextBox.Focus();
         }
 
+        string[] athletes = new string[100];
+        int[] times = new int[100];
+        int currentIndex = 0;
+        int fastestIndex = -1;
+
         string nameFastest = "";
-        int timeFastest = 0;
+        int timeFastest;
 
         private void newButton_Click(object sender, RoutedEventArgs e)
         {
             int timeCurrent;
             bool isValidNumber = int.TryParse(timeTextBox.Text, out timeCurrent);
 
-            if (isValidNumber == true)
-            //of 'if (isValidNumber)' is eigenlijk al genoeg 
+            if (currentIndex >= athletes.Length)
             {
-                if (timeFastest == 0 || timeCurrent < timeFastest)
-                {
-                    timeFastest = timeCurrent;
-                    nameFastest = nameTextBox.Text;
-                }
+                MessageBox.Show("Maximum number of athletes reached", "Too many inputs", MessageBoxButton.OK, MessageBoxImage.Stop);
             }
+            else
+            { 
+                if (isValidNumber == true)       // of 'if (isValidNumber)' is eigenlijk al genoeg
+                {
+                    athletes[currentIndex] = nameTextBox.Text;
+                    times[currentIndex] = timeCurrent;
 
-            nameTextBox.Clear();
-            timeTextBox.Clear();
-            resultTextBox.Clear();
+                    if (fastestIndex == -1 || timeCurrent < timeFastest)
+                    { 
+                        fastestIndex = currentIndex;
+
+                        timeFastest = times[fastestIndex];
+                        nameFastest = athletes[fastestIndex];
+                    }
+
+                    currentIndex++;
+
+                    /*
+                    if (timeFastest == 0 || timeCurrent < timeFastest)
+                    {
+                        timeFastest = timeCurrent;
+                        nameFastest = nameTextBox.Text;
+                    }
+                    */
+                }
+
+                nameTextBox.Clear();
+                timeTextBox.Clear();
+                resultTextBox.Clear();
+                nameTextBox.Focus();
+            }
         }
 
         private void clearButton_Click(object sender, RoutedEventArgs e)
